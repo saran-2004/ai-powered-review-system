@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Reviews</title>
+</head>
+<body>
+
+<h2>Upload Reviews (CSV)</h2>
+
+<p>CSV format:</p>
+<pre>
+review_text
+"Great product, loved it"
+"Delivery was late"
+"Not worth the price"
+</pre>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit">Analyze Reviews</button>
+</form>
+
+</body>
+</html>

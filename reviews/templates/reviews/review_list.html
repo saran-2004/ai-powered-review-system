@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Reviews</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+<div class="container mt-5">
+
+    <h3 class="mb-4 text-center">User Reviews</h3>
+
+    <table class="table table-bordered table-hover bg-white shadow">
+        <thead class="table-dark">
+        <tr>
+            <th>Review</th>
+            <th>Sentiment</th>
+            <th>Rating</th>
+            <th>Language</th>
+            <th>Confidence</th>
+            <th>Date</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review.review_text }}</td>
+
+            <td>
+                <span class="badge bg-{{ review.get_sentiment_badge_class }}">
+                    {{ review.sentiment|title }}
+                </span>
+            </td>
+
+            <td>{{ review.get_rating_display }}</td>
+
+            <td>{{ review.language|upper }}</td>
+
+            <td>{{ review.get_confidence_level }}</td>
+
+            <td>{{ review.created_at|date:"d M Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No reviews available</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Review Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-4">
+
+    <!-- ================= HEADER ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>AI Review Analytics Dashboard</h2>
+
+        <div>
+            <span class="me-3">👤 {{ request.user.username }}</span>
+            <form method="post" action="{% url 'logout' %}" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= FILTERS ================= -->
+    <div class="card p-3 mb-4 shadow">
+        <form method="get" class="row g-3 align-items-end">
+
+            <div class="col-md-3">
+                <label class="form-label">Sentiment</label>
+                <select name="sentiment" class="form-select">
+                    <option value="">All</option>
+                    <option value="positive" {% if selected_sentiment == "positive" %}selected{% endif %}>Positive</option>
+                    <option value="neutral" {% if selected_sentiment == "neutral" %}selected{% endif %}>Neutral</option>
+                    <option value="negative" {% if selected_sentiment == "negative" %}selected{% endif %}>Negative</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Rating</label>
+                <select name="rating" class="form-select">
+                    <option value="">All</option>
+                    {% for i in "12345" %}
+                        <option value="{{ i }}" {% if selected_rating == i %}selected{% endif %}>
+                            {{ i }} ★
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Time</label>
+                <select name="days" class="form-select">
+                    <option value="">All Time</option>
+                    <option value="1" {% if selected_days == "1" %}selected{% endif %}>Today</option>
+                    <option value="7" {% if selected_days == "7" %}selected{% endif %}>7 Days</option>
+                    <option value="30" {% if selected_days == "30" %}selected{% endif %}>30 Days</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">Apply</button>
+                <a href="{% url 'reviews:dashboard' %}" class="btn btn-outline-secondary w-100">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- ================= STATS ================= -->
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow">
+                <h6>Total Reviews</h6>
+                <h3>{{ total_reviews }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow">
+                <h6>Average Rating</h6>
+                <h3>{{ avg_rating|floatformat:1 }} ★</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow">
+                <h6>Suspicious</h6>
+                <h3 class="text-danger">{{ suspicious_count }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= CHARTS ================= -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4 shadow">
+                <h5 class="text-center">Sentiment Distribution</h5>
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4 shadow">
+                <h5 class="text-center">Rating Distribution</h5>
+                <canvas id="ratingChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= JAVASCRIPT ONLY ================= -->
+<script>
+    const sentimentCtx = document.getElementById("sentimentChart");
+    const ratingCtx = document.getElementById("ratingChart");
+
+    new Chart(sentimentCtx, {
+        type: "pie",
+        data: {
+            labels: ["Positive", "Neutral", "Negative"],
+            datasets: [{
+                data: [
+                    {{ sentiment_stats.positive }},
+                    {{ sentiment_stats.neutral }},
+                    {{ sentiment_stats.negative }}
+                ],
+                backgroundColor: ["#28a745", "#ffc107", "#dc3545"]
+            }]
+        }
+    });
+
+    new Chart(ratingCtx, {
+        type: "bar",
+        data: {
+            labels: ["1★", "2★", "3★", "4★", "5★"],
+            datasets: [{
+                label: "Number of Reviews",
+                data: [
+                    {{ rating_stats.0 }},
+                    {{ rating_stats.1 }},
+                    {{ rating_stats.2 }},
+                    {{ rating_stats.3 }},
+                    {{ rating_stats.4 }}
+                ],
+                backgroundColor: "#0d6efd"
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

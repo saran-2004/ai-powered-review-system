@@ -1,0 +1,81 @@
+# ============================================================================
+# AI-Powered Review System - Python Dependencies
+# ============================================================================
+# Installation: pip install -r requirements.txt
+
+# Django Framework
+Django==4.2.7
+django-crispy-forms==2.1
+
+# AI/ML Libraries
+transformers==4.35.2          # HuggingFace Transformers for sentiment analysis
+torch==2.1.1                  # PyTorch backend for transformers
+sentencepiece==0.1.99         # Required for some transformer models
+scipy==1.11.4                 # For softmax and statistical functions
+
+# Language Processing
+langdetect==1.0.9             # Language detection (Tamil/English)
+googletrans==4.0.0rc1         # Google Translate API for Tamil→English
+
+# Database and ORM (included with Django, but explicit for clarity)
+# Django uses SQLite by default - no additional dependencies needed
+
+# Production Deployment (Optional)
+gunicorn==21.2.0              # WSGI HTTP Server for production
+whitenoise==6.6.0             # Static file serving in production
+
+# Development Tools
+ipython==8.18.1               # Enhanced Python shell
+django-debug-toolbar==4.2.0   # Debugging toolbar for development
+
+# Testing
+pytest==7.4.3                 # Testing framework
+pytest-django==4.7.0          # Django integration for pytest
+factory-boy==3.3.0            # Test data generation
+
+# Code Quality
+black==23.11.0                # Code formatter
+flake8==6.1.0                 # Linting
+pylint==3.0.3                 # Static code analysis
+
+# ============================================================================
+# OPTIONAL PRODUCTION ENHANCEMENTS
+# ============================================================================
+
+# Redis (for caching and Celery)
+# redis==5.0.1
+# django-redis==5.4.0
+
+# Celery (for async tasks)
+# celery==5.3.4
+# flower==2.0.1               # Celery monitoring
+
+# PostgreSQL (production database)
+# psycopg2-binary==2.9.9
+
+# Performance Monitoring
+# sentry-sdk==1.38.0          # Error tracking
+
+# API Development
+# djangorestframework==3.14.0 # REST API
+# django-cors-headers==4.3.1  # CORS for API
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# 
+# GPU Support:
+#   For GPU acceleration, install PyTorch with CUDA:
+#   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+#
+# Production Database:
+#   Replace SQLite with PostgreSQL for production:
+#   pip install psycopg2-binary
+#
+# Model Download:
+#   First run will download ~500MB sentiment model from HuggingFace
+#   Ensure stable internet connection
+#
+# Python Version:
+#   Requires Python 3.8 or higher
+#   Recommended: Python 3.10+

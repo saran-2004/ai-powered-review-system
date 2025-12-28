@@ -1,0 +1,37 @@
+{% extends "reviews/base.html" %}
+
+{% block content %}
+<h1 class="text-2xl font-semibold mb-4">All Active Reviews</h1>
+
+<div class="bg-white rounded shadow">
+  <table class="w-full">
+    <thead class="bg-gray-50 text-left">
+      <tr>
+        <th class="p-3">Title</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews %}
+      <tr class="border-t hover:bg-gray-50">
+        <td class="p-3 font-medium">
+          {{ review.content_object }}
+        </td>
+        <td>{{ review.created_at|date:"d M Y" }}</td>
+        <td>
+          <span class="px-2 py-1 rounded text-white
+            {% if review.sentiment == 'positive' %}bg-green-500
+            {% elif review.sentiment == 'negative' %}bg-red-500
+            {% else %}bg-yellow-500{% endif %}">
+            {{ review.sentiment }}
+          </span>
+        </td>
+        <td>{{ review.rating }} ★</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
